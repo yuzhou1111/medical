@@ -1,0 +1,39 @@
+{
+  "name": "qwen_lora_medical_smoke",
+  "description": "Smoke test for Qwen2.5-1.5B-Instruct LoRA on medical consultation structured records",
+  "model_name": "./Qwen2.5-1.5B-Instruct",
+  "system_prompt": "你是一个医疗问诊记录结构化助手。请严格按照 schema 将问诊内容整理为合法 JSON，只记录原文明确提到的信息，不要诊断、不要编造、不要输出治疗或处方建议。",
+  "lora": {
+    "r": 8,
+    "alpha": 16,
+    "targets": ["q_proj", "k_proj", "v_proj", "o_proj"],
+    "dropout": 0.05
+  },
+  "optimizer": {
+    "lr": 3e-5,
+    "weight_decay": 0.01
+  },
+  "training": {
+    "batch_size": 2,
+    "gradient_accumulation_steps": 4,
+    "max_steps": 50,
+    "eval_interval": 10,
+    "save_interval": 25,
+    "warmup_steps": 10,
+    "max_grad_norm": 1.0,
+    "max_length": 768,
+    "device": "cuda",
+    "seed": 42,
+    "out_dir": "outputs/qwen_lora_medical_smoke",
+    "fp16": true
+  },
+  "data": {
+    "train_data_path": "data/medical_sft_candidate/train.jsonl",
+    "valid_data_path": "data/medical_sft_candidate/valid.jsonl"
+  },
+  "logging": {
+    "wandb_project": "micro-lm-qwen-medical",
+    "run_name": "qwen_lora_medical_smoke",
+    "mode": "disabled"
+  }
+}
